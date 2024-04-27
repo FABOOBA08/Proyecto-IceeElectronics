@@ -22,7 +22,7 @@
                 </button>
                 <div class="sidebar-logo">
                     <a href="./Inicio.html">Inicio</a>
-                </div>
+                </div>          
             </div>
             <ul class="sidebar-nav">
                 <li class="sidebar-item">
@@ -91,7 +91,7 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div id="dataModal" class="modal-body">
-                                                <form action="http://localhost:3001/usuarios/validar" method="post">
+                                                <form action="http://localhost:3003/validar" method="post">
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text">
                                                             <i class='bx bx-id-card'></i>
@@ -190,7 +190,7 @@
         crossorigin="anonymous"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            fetch('http://localhost:3003/usuarios/obtener-usuarios') // Llama al controlador para obtener datos de usuarios
+            fetch('http://localhost:3003/obtener-usuarios') // Llama al controlador para obtener datos de usuarios
                 .then(response => response.json())
                 .then(data => {
                     const tablaUsuarios = document.getElementById('tablaUsuarios');
@@ -206,9 +206,7 @@
                                 <td>${usuario.contrasena}</td>
                                 <td>${usuario.rol}</td>
                                 <td>   
-
-                                    <button class="btn btn-primary btn-sm botonmod" data-bs-toggle="modal" data-bs-target="#userModal" data-userid="${usuario.id} data-userid="1">Editar</button>
-                                    <button class="btn btn-primary btn-sm botonmod" data-bs-toggle="modal" data-bs-target="#userModal" data-userid="${usuario.id}">Editar</button>
+                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#userModal" data-userid="${usuario.id}">Editar</button>
                                     <button class="btn btn-sm btn-danger botoneliminar" onclick="eliminarUsuario(${usuario.id})">Eliminar</button>
                                 </td>
                             `;
@@ -220,7 +218,7 @@
 
         function eliminarUsuario(id) {
             if (confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
-                fetch(`http://localhost:3003/usuarios/eliminar-usuario/${id}`, {
+                fetch(`http://localhost:3003/eliminar-usuario/${id}`, {
                     method: 'DELETE'
                 })
                     .then(response => {
@@ -244,53 +242,50 @@
                         throw new Error("Error al obtener datos del servidor");
                     }
                     return response.json(); // Parsear respuesta a JSON
-                })
+                })  
                 .then((data) => {
                     if (!data) {
                         throw new Error("Error: Datos del usuario están vacíos");
                     }
                     var modalBody = document.getElementById("userModalBody");
-                    modalBody.innerHTML = `
-                    <form id="formActualizar" action="http://localhost:3003/usuario/${userId}/actualizar" method="post">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text"><i class='bx bx-id-card'></i></span>
-                            <input disabled type="number" name="id" class="form-control form-control-md fs-6" placeholder="Cédula" value="${data.id}" />
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text"><i class="bx bx-user"></i></span>
-                            <input type="text" name="nombre" class="form-control form-control-md fs-6" placeholder="Nombre" value="${data.nombre}" />
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text"><i class='bx bxs-user-badge'></i></span>
-                            <input type="text" name="nombreUsuario" class="form-control form-control-md fs-6" placeholder="Usuario" value="${data.nombreUsuario}" />
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text"><i class="bx bx-lock-alt"></i></span>
-                            <input type="password" name="contrasena" class="form-control form-control-md fs-6" placeholder="Contraseña" />
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text"><i la bx bx-lock-alt"></i></span>
-                            <input type="password" class="form-control form-control-md fs-6" placeholder="Repetir contraseña" />
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text"><i la bx bxs-user-detail'></i></span>
-                            <select name="rol" class="form-select form-select-md">
-                                <option value="Administrador" ${data.rol === 'Administrador' ? 'selected' : ''}>Administrador</option>
-                                <option value="Coordinador" ${data.rol === 'Coordinador' ? 'selected' : ''}>Coordinador</option>
-                                <option value="Técnico" ${data.rol === 'Técnico' ? 'selected' : ''}>Técnico</option>
-                            </select>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="submit"  id="saveChangesButton" class="btn btn-primary">Guardar cambios</button>
-                        </div>
-                    </form>
-                `;
-                })
+                modalBody.innerHTML = `
+                        <form id="formActualizar" action="/usuario/${userId}/actualizar" method="post">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class='bx bx-id-card'></i></span>
+                                <input disabled type="number" name="id" class="form-control form-control-md fs-6" placeholder="Cédula" value="${data.id}" />
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="bx bx-user"></i></span>
+                                <input type="text" name="nombre" class="form-control form-control-md fs-6" placeholder="Nombre" value="${data.nombre}" />
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class='bx bxs-user-badge'></i></span>
+                                <input type="text" name="nombreUsuario" class="form-control form-control-md fs-6" placeholder="Usuario" value="${data.nombreUsuario}" />
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="bx bx-lock-alt"></i></span>
+                                <input type="password" name="contrasena" class="form-control form-control-md fs-6" placeholder="Contraseña" />
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class='bx bxs-user-detail'></i></span>
+                                <select name="rol" class="form-select form-select-md">
+                                    <option value="Administrador" ${data.rol === 'Administrador' ? 'selected' : ''}>Administrador</option>
+                                    <option value="Coordinador" ${data.rol === 'Coordinador' ? 'selected' : ''}>Coordinador</option>
+                                    <option value="Técnico" ${data.rol === 'Técnico' ? 'selected' : ''}>Técnico</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit"  id="saveChangesButton" class="btn btn-primary">Guardar cambios</button>
+                            </div>
+                        </form>
+                    `;
+              })
                 .catch(error => console.error("Error al obtener datos del usuario:", error));
         });
         document.getElementById("userModalBody").addEventListener("submit", function (event) {
             event.preventDefault(); // Evitar recarga de la página
+            var form = event.target;
 
             // Obtener valores del formulario
             var form = event.target;
@@ -300,7 +295,7 @@
             var nombreUsuario = form.elements["nombreUsuario"].value;
             var contrasena = form.elements["contrasena"].value;
             var rol = form.elements["rol"].value;
-
+           
             // Estructura de datos para enviar al servidor
             var data = {
                 id: id,
@@ -309,9 +304,9 @@
                 contrasena: contrasena, // Solo si es necesario actualizar
                 rol: rol
             };
-
+            console.log(data);
             // Enviar datos al backend mediante fetch
-            fetch(`http://localhost:3003/usuario/${userId}/actualizar`, {//Aqui toma el id del usuario para poder actualizar el registro especifico
+            fetch(`http://localhost:3003/usuario/:id/actualizar`, {//Aqui toma el id del usuario para poder actualizar el registro especifico
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json" // Indicar que estamos enviando datos en formato JSON
@@ -322,6 +317,7 @@
                     if (response.ok) {
                         alert("Usuario actualizado correctamente");
                         // Redirigir a una página específica o recargar la página para mostrar cambios
+                        console.log(data);
                         window.location.href = "";
                     } else {
                         alert("Error al actualizar usuario");
