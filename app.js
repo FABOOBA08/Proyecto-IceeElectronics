@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public")); 
 
 // Registrar las rutas
-app.use('/usuarios', userRoutes);
+app.use('/', userRoutes);
 
 // Ruta para la página principal
 app.get('/', (req, res) => {
